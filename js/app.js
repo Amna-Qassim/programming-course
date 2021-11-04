@@ -1,3 +1,5 @@
+//use pure jquery to make validation for the form
+
 'use strict';
 
 // Perform functions when form is submitted
@@ -111,3 +113,69 @@ $('#email').on('input', function() {
     }
   }
 });
+
+
+//store data locally
+
+//Listen for form submit
+document.getElementById('regForm').addEventListener('submit', submitForm);
+
+// Submit form
+function submitForm(e) {
+  e.preventDefault();
+
+  // Get values
+  var fullName = getInputVal('fullName');
+  var email = getInputVal('email');
+  var phoneNumber = getInputVal('phoneNumber');
+
+  // Save message
+  saveMessage(fullName, email, phoneNumber)
+
+}
+
+//Function to grt form values
+function getInputVal(id) {
+  var str,
+  input = document.getElementById(id);
+  var inputVal = "";
+  if (input) {
+    inputVal = input.value;
+  }
+  return inputVal;
+}
+
+
+async function saveMessage(fullName, email, phoneNumber){
+  
+  // wait for localforage to be ready
+  await localforage.ready().catch(function(err){
+    console.error('Failed to load localforage drivers');
+    console.error(err);
+  });
+
+  // create storage instance
+  let store = localforage.createInstance({
+    name: 'forms'
+  });
+
+  // check if we already have an array called registrations in storage
+  if (await store.getItem('registrations') === null){
+
+    // no array called registrations found. so we create one
+    await store.setItem('registrations', []);
+  }
+
+  // get a colleciton of all registrations in storage
+  let collection = await store.getItem('registrations');
+
+  // add data to the collection
+  collection.push({
+    fullName: fullName,
+    email: email,
+    phoneNumber: phoneNumber,
+  });
+
+  // save the collection to registrations in storage.
+  await store.setItem('registrations', collection);
+}
