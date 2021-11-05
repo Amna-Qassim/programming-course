@@ -34,7 +34,7 @@ input.error, textarea.error {
   color: red;
 }
 
-#fullName-error, #email-error{
+#fullName-error, #email-error, #phoneNumber-error{
   color: #d9534f;
   padding: 12px;
   display: none;
