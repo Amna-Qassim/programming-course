@@ -1,3 +1,4 @@
+//validate form by jquery validation library
 $(document).ready(function() {
   $("#regForm").validate({
       rules: {
